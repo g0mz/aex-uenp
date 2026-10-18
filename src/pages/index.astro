@@ -1,4 +1,15 @@
 ---
-import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Mecânica Gaúcho Diesel | Ourinhos e Região';
+const description = 'Oficina especializada em caminhões em Ourinhos e região. Manutenção preventiva, mecânica geral diesel e socorro para caminhoneiros, empresas e frotas.';
 ---
-<html lang="pt-BR"><head><meta charset="UTF-8" /><title>Mecânica Gaúcho Diesel</title></head><body><main id="conteudo"></main></body></html>
+
+<BaseLayout {title} {description}>
+  <Header />
+  <main id="conteudo">
+  </main>
+  <Footer />
+</BaseLayout>

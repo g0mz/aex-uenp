@@ -1,0 +1,23 @@
+---
+import BrandMark from './BrandMark.astro';
+import { company, emailUrl, phoneUrl } from '../data/company';
+---
+
+<footer class="bg-ink py-10 text-white">
+  <div class="container-site flex flex-col justify-between gap-8 border-b border-white/15 pb-8 sm:flex-row sm:items-center">
+    <BrandMark light />
+    <div class="text-sm leading-6 text-white/65 sm:text-right">
+      <p>{company.address}</p>
+      <p class="mt-2">{company.legalName}</p>
+      <p>CNPJ: {company.cnpj}</p>
+      <div class="flex flex-wrap gap-x-4 sm:justify-end">
+        <a href={phoneUrl} class="font-bold text-white hover:text-safety">{company.phoneDisplay}</a>
+        <a href={emailUrl} class="font-bold text-white hover:text-safety">{company.email}</a>
+      </div>
+    </div>
+  </div>
+  <div class="container-site flex flex-col justify-between gap-2 pt-6 text-xs text-white/45 sm:flex-row">
+    <p>© {new Date().getFullYear()} Mecânica Gaúcho Diesel.</p>
+    <p>Atendimento para caminhões e frotas em Ourinhos - SP.</p>
+  </div>
+</footer>

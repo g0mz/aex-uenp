@@ -1,0 +1,97 @@
+---
+import BrandMark from './BrandMark.astro';
+import { whatsappUrl } from '../data/company';
+import { clients } from '../data/clients';
+import { portfolio } from '../data/portfolio';
+
+const links = [
+  ['Início', '#inicio'],
+  ['Serviços', '#servicos'],
+  ...(portfolio.some((item) => item.published && item.image) ? [['Galeria', '#galeria']] : []),
+  ['Sobre', '#sobre'],
+  ...(clients.some((client) => client.published) ? [['Clientes', '#clientes']] : []),
+  ['Localização', '#localizacao'],
+  ['Contato', '#contato'],
+] as const;
+---
+
+<header class="sticky top-0 z-50 border-b border-white/10 bg-ink text-white shadow-lg">
+  <div class="container-site flex min-h-20 items-center justify-between gap-4">
+    <BrandMark light />
+
+    <nav aria-label="Navegação principal" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {links.map(([label, href]) => (
+          <li>
+            <a href={href} class="block px-3 py-3 text-xs font-bold uppercase tracking-wider text-white/80 hover:text-safety">
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="hidden xl:block">
+      <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="button-primary">
+        Solicitar atendimento
+      </a>
+    </div>
+
+    <button
+      type="button"
+      class="grid size-12 place-items-center border border-white/30 lg:hidden"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
+      aria-label="Abrir menu"
+      data-menu-button
+    >
+      <span class="sr-only">Abrir menu</span>
+      <span class="flex w-6 flex-col gap-1.5" aria-hidden="true">
+        <span class="h-0.5 bg-safety"></span>
+        <span class="h-0.5 bg-safety"></span>
+        <span class="h-0.5 bg-safety"></span>
+      </span>
+    </button>
+  </div>
+
+  <nav id="menu-mobile" aria-label="Navegação móvel" class="hidden border-t border-white/10 bg-graphite lg:hidden" data-mobile-menu>
+    <ul class="container-site py-3">
+      {links.map(([label, href]) => (
+        <li class="border-b border-white/10 last:border-0">
+          <a href={href} class="block py-4 text-sm font-bold uppercase tracking-wider text-white">{label}</a>
+        </li>
+      ))}
+      <li class="pt-3">
+        <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="button-primary w-full">Solicitar atendimento</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-menu-button]');
+  const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+
+  const closeMenu = () => {
+    if (!button || !menu) return;
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-label', 'Abrir menu');
+    menu.classList.add('hidden');
+  };
+
+  button?.addEventListener('click', () => {
+    if (!menu) return;
+    const willOpen = button.getAttribute('aria-expanded') !== 'true';
+    button.setAttribute('aria-expanded', String(willOpen));
+    button.setAttribute('aria-label', willOpen ? 'Fechar menu' : 'Abrir menu');
+    menu.classList.toggle('hidden', !willOpen);
+  });
+
+  menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMenu();
+      button?.focus();
+    }
+  });
+</script>

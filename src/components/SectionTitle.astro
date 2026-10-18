@@ -1,0 +1,27 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  light?: boolean;
+  singleLine?: boolean;
+  descriptionSingleLine?: boolean;
+}
+
+const { eyebrow, title, description, light = false, singleLine = false, descriptionSingleLine = false } = Astro.props;
+---
+
+<div class:list={[singleLine ? "max-w-none" : "max-w-3xl"]}>
+  {eyebrow && <p class:list={["eyebrow", light ? "text-white/70" : "text-steel"]}>{eyebrow}</p>}
+  <h2 class:list={[
+    "display-type leading-[1.05]",
+    eyebrow && "mt-5",
+    singleLine ? "text-[clamp(1.25rem,4vw,2.25rem)] min-[480px]:whitespace-nowrap" : "text-3xl sm:text-4xl",
+    light ? "text-white" : "text-ink",
+  ]}>{title}</h2>
+  {description && <p class:list={[
+    "mt-5 text-base leading-7 sm:text-lg",
+    descriptionSingleLine ? "max-w-none lg:whitespace-nowrap" : "max-w-2xl",
+    light ? "text-white/70" : "text-steel",
+  ]}>{description}</p>}
+</div>
