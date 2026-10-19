@@ -1,0 +1,39 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import { company } from '../data/company';
+
+const differentials = [
+  'Experiência com diferentes marcas',
+  'Atuação em caminhões e frotas',
+  'Relações duradouras com clientes',
+  'Manutenção preventiva e revisões',
+];
+---
+
+<section id="sobre" class="section-pad overflow-hidden bg-ink text-white" aria-labelledby="sobre-titulo">
+  <div class="container-site grid gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+    <div>
+      <div id="sobre-titulo">
+        <SectionTitle eyebrow="Sobre" title="Experiência no setor diesel" light />
+      </div>
+      <div class="relative mt-10 border-l-4 border-safety pl-6">
+        <span class="display-type block text-8xl leading-none text-safety">{company.experienceYears}</span>
+        <span class="display-type text-3xl text-white">anos de atuação</span>
+      </div>
+    </div>
+    <div>
+      <div class="space-y-5 text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
+        <p>A Mecânica Gaúcho Diesel atua há 18 anos no setor de manutenção de caminhões em Ourinhos - SP. Localizada na Rodovia Raposo Tavares, a oficina atende caminhoneiros, empresas e frotas com serviços de mecânica geral diesel, manutenção preventiva, revisões e diagnóstico de falhas.</p>
+        <p>Com experiência em diferentes marcas e tipos de caminhões, a oficina oferece um atendimento direto, objetivo e voltado para resolver os problemas do dia a dia de quem depende do caminhão para trabalhar.</p>
+      </div>
+      <ul class="mt-10 grid gap-px bg-white/15 border border-white/15 sm:grid-cols-2">
+        {differentials.map((item) => (
+          <li class="flex min-h-20 items-center gap-3 bg-graphite p-4 text-sm font-bold">
+            <span class="grid size-6 shrink-0 place-items-center bg-safety text-xs font-black text-ink" aria-hidden="true">✓</span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
