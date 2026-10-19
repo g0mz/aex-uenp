@@ -1,0 +1,29 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import { portfolio } from '../data/portfolio';
+
+const displayOrder = [0, 3, 2, 4, 6, 7, 1, 5];
+const publishedItems = displayOrder
+  .map((index) => portfolio[index])
+  .filter((item) => item?.published && item.image);
+---
+
+{publishedItems.length > 0 && (
+  <section id="galeria" class="section-pad border-y border-ink/15 bg-[#ded9cd]" aria-labelledby="galeria-titulo">
+    <div class="container-site">
+      <div id="galeria-titulo">
+        <SectionTitle eyebrow="Galeria" title="Trabalho dentro da oficina" description="Registros de peças, motores e caminhões atendidos pela Mecânica Gaúcho Diesel." />
+      </div>
+      <ul class="mt-12 grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-4">
+        {publishedItems.map((item) => (
+          <li class="overflow-hidden border-2 border-ink/70 bg-ink shadow-[4px_4px_0_rgba(7,26,56,.16)]">
+            <img src={item.image} alt={item.alt} width="720" height="900" loading="lazy" decoding="async" class="aspect-[4/5] w-full object-cover" />
+            <div class="border-t border-white/15 px-3 py-3 text-white sm:px-4">
+              <p class="text-xs leading-5 text-white/75 sm:text-sm">{item.description}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
