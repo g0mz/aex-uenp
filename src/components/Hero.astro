@@ -1,0 +1,55 @@
+---
+import { company } from '../data/company';
+---
+
+<section id="inicio" class="relative overflow-hidden border-b-8 border-safety bg-[#091f3f] text-white">
+  <div class="absolute inset-0 opacity-40 [background-image:repeating-linear-gradient(90deg,transparent_0_79px,rgba(255,255,255,.025)_79px_80px)]" aria-hidden="true"></div>
+  <div class="container-site relative grid items-center gap-12 py-14 md:py-20 lg:min-h-[43rem] lg:grid-cols-[0.95fr_1.05fr] lg:gap-16 xl:gap-20">
+    <div>
+      <h1 class="display-type max-w-4xl text-[clamp(2.6rem,4.8vw,4.4rem)] leading-[0.98] text-safety">
+        Seu caminhão pronto para seguir viagem
+      </h1>
+      <div class="my-7 h-1.5 w-28 bg-safety shadow-[0_5px_0_rgba(217,173,22,.25)]" aria-hidden="true"></div>
+      <p class="max-w-2xl text-base font-bold leading-7 text-white sm:text-xl sm:leading-8">
+        Atendimento para caminhoneiros, empresas e frotas em Ourinhos e região, com manutenção preventiva e mecânica geral.
+      </p>
+      <div class="mt-8 flex flex-col items-start gap-4 sm:flex-row">
+        <a href="#servicos" class="button-primary min-h-14 px-7 text-sm shadow-[5px_5px_0_rgba(0,0,0,.45)] hover:bg-white">Conhecer os serviços</a>
+      </div>
+    </div>
+
+    <div class="relative mx-auto w-full max-w-2xl" aria-label="Fachada e informações principais da oficina">
+      <figure class="overflow-hidden border-2 border-white/30 bg-ink shadow-[8px_8px_0_rgba(0,0,0,.28)]">
+        <div class="overflow-hidden bg-ink">
+          <img
+            src="/images/hero/fachada-oficina.webp"
+            alt="Fachada da Mecânica Gaúcho Diesel com caminhões em manutenção"
+            width="1599"
+            height="899"
+            fetchpriority="high"
+            decoding="async"
+            class="aspect-[25/18] w-full object-cover [object-position:94%_50%]"
+          />
+        </div>
+        <figcaption class="border-t border-white/15 bg-ink px-5 py-3 text-center text-xs font-bold uppercase tracking-[0.12em] text-white/85">
+          Oficina na Rodovia Raposo Tavares • KM 377 + 700 m
+        </figcaption>
+      </figure>
+
+      <dl class="relative mt-5 grid grid-cols-3 divide-x divide-white/15 border border-white/15 bg-ink/55 px-4 py-5 text-center shadow-[6px_6px_0_rgba(0,0,0,.2)]">
+        <div class="min-w-0 px-1 sm:px-2">
+          <dt class="text-[0.62rem] font-bold uppercase tracking-wider text-white/55">Experiência</dt>
+          <dd class="font-display mt-2 text-[0.78rem] font-black text-white min-[380px]:text-sm sm:text-xl">{company.experienceYears} anos</dd>
+        </div>
+        <div class="min-w-0 px-1 sm:px-2">
+          <dt class="text-[0.62rem] font-bold uppercase tracking-wider text-white/55">Atendimento</dt>
+          <dd class="font-display mt-2 text-[0.78rem] font-black text-white min-[380px]:text-sm sm:text-xl">Caminhões</dd>
+        </div>
+        <div class="min-w-0 px-1 sm:px-2">
+          <dt class="text-[0.62rem] font-bold uppercase tracking-wider text-white/55">Cidade</dt>
+          <dd class="font-display mt-2 text-[0.78rem] font-black text-white min-[380px]:text-sm sm:text-xl">Ourinhos</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
