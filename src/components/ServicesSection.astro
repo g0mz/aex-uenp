@@ -1,0 +1,27 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import { services } from '../data/services';
+---
+
+<section id="servicos" class="section-pad" aria-labelledby="servicos-titulo">
+  <div class="container-site">
+    <div id="servicos-titulo">
+      <SectionTitle
+        eyebrow="Serviços"
+        title="Manutenção completa para caminhões"
+        description="Do diagnóstico ao reparo, o atendimento é direto e voltado para manter o caminhão em funcionamento."
+        singleLine
+        descriptionSingleLine
+      />
+    </div>
+    <ol class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {services.map((service) => (
+        <li class="relative min-h-52 border border-ink/30 border-t-4 border-t-safety bg-[#f7f4eb] p-6 shadow-[3px_3px_0_rgba(7,26,56,.16)] sm:p-7">
+          <h3 class="font-display text-xl font-black uppercase leading-tight">{service.title}</h3>
+          <p class="mt-4 text-sm leading-6 text-steel">{service.description}</p>
+          <span class="rivet absolute right-3 top-3" aria-hidden="true"></span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
