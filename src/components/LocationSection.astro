@@ -1,0 +1,37 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import { company, mapsEmbedUrl, mapsUrl } from '../data/company';
+---
+
+<section id="localizacao" class="section-pad bg-white/55" aria-labelledby="localizacao-titulo">
+  <div class="container-site">
+    <div id="localizacao-titulo">
+      <SectionTitle eyebrow="Localização" title="Na Rodovia Raposo Tavares, em Ourinhos" description="Acesso direto para caminhoneiros, empresas e frotas da região." singleLine />
+    </div>
+    <div class="mt-12 grid border border-ink/20 bg-white shadow-[8px_8px_0_#051326] lg:grid-cols-[0.75fr_1.25fr]">
+      <div class="flex flex-col justify-between gap-10 p-7 sm:p-10">
+        <dl class="space-y-8">
+          <div>
+            <dt class="text-xs font-black uppercase tracking-[0.16em] text-steel">Endereço</dt>
+            <dd class="mt-2 text-base font-bold leading-7">{company.address}</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-black uppercase tracking-[0.16em] text-steel">Horário</dt>
+            <dd class="mt-2 text-base font-bold leading-7">{company.openingHours}</dd>
+          </div>
+        </dl>
+        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" class="button-primary self-start">Abrir no Google Maps</a>
+      </div>
+      <div class="relative min-h-80 border-t border-ink/20 bg-[#d9d7cf] lg:min-h-[30rem] lg:border-l lg:border-t-0">
+        <iframe
+          src={mapsEmbedUrl}
+          title="Mapa da Mecânica Gaúcho Diesel"
+          class="absolute inset-0 h-full w-full border-0 grayscale-[0.25]"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</section>
