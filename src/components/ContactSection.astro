@@ -1,0 +1,36 @@
+---
+import { company, emailUrl, phoneUrl } from '../data/company';
+
+const publishedSocials = company.socialLinks.filter((link) => link.published && link.url);
+const commercialEmailUrl = `${emailUrl}?subject=${encodeURIComponent('Negociações e ofertas comerciais')}`;
+---
+
+<section id="contato" class="relative overflow-hidden bg-safety py-16 text-ink sm:py-20" aria-labelledby="contato-titulo">
+  <div class="container-site relative z-10 grid items-end gap-10 lg:grid-cols-[1fr_auto]">
+    <div>
+      <p class="text-xs font-black uppercase tracking-[0.18em]">Contato comercial</p>
+      <h2 id="contato-titulo" class="display-type mt-4 max-w-3xl text-4xl leading-tight sm:text-5xl">Fale conosco</h2>
+      <p class="mt-6 max-w-2xl text-base font-medium leading-7">Para apresentar propostas comerciais, parcerias, produtos ou ofertas, entre em contato por e-mail.</p>
+    </div>
+    <a href={commercialEmailUrl} class="inline-flex min-h-16 items-center justify-center border-4 border-double border-white bg-ink px-7 text-sm font-black uppercase tracking-wider text-white">
+      Enviar e-mail
+    </a>
+  </div>
+  <div class="container-site relative z-10 mt-12 grid gap-px border border-ink/30 bg-ink/30 sm:grid-cols-2">
+    <div class="bg-safety p-5">
+      <span class="block text-[0.65rem] font-black uppercase tracking-widest">E-mail comercial</span>
+      <a href={commercialEmailUrl} class="mt-2 block break-all font-black underline decoration-2 underline-offset-4">{company.email}</a>
+    </div>
+    <div class="bg-safety p-5">
+      <span class="block text-[0.65rem] font-black uppercase tracking-widest">Telefone celular</span>
+      <a href={phoneUrl} class="mt-2 block font-black underline decoration-2 underline-offset-4">{company.phoneDisplay}</a>
+    </div>
+  </div>
+  {publishedSocials.length > 0 && (
+    <nav class="container-site relative z-10 mt-6" aria-label="Redes sociais">
+      <ul class="flex flex-wrap gap-5">
+        {publishedSocials.map((link) => <li><a href={link.url} target="_blank" rel="noopener noreferrer" class="font-bold underline">{link.label}</a></li>)}
+      </ul>
+    </nav>
+  )}
+</section>
