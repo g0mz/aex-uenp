@@ -1,0 +1,46 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import { clients } from '../data/clients';
+
+const publishedClients = clients.filter((client) => client.published);
+const featuredClients = publishedClients.filter((client) => client.featured);
+const otherClients = publishedClients.filter((client) => !client.featured);
+---
+
+{publishedClients.length > 0 && (
+  <section id="clientes" class="section-pad bg-paper" aria-labelledby="clientes-titulo">
+    <div class="container-site">
+      <div id="clientes-titulo">
+        <SectionTitle eyebrow="Clientes" title="Confiança construída no nosso trabalho" description="Empresas do agronegócio, transporte, combustíveis e serviços confiam seus caminhões e frotas à Gaúcho Diesel." singleLine descriptionSingleLine />
+      </div>
+
+      {featuredClients.length > 0 && (
+        <ul class="mt-12 grid gap-5 lg:grid-cols-2">
+          {featuredClients.map((client) => (
+            <li class="relative overflow-hidden border-2 border-ink bg-white p-7 shadow-[6px_6px_0_#071a38] sm:p-8">
+              <span class="absolute right-0 top-0 bg-safety px-3 py-2 text-[0.65rem] font-black uppercase tracking-[0.18em] text-ink">Cliente em destaque</span>
+              <div class="max-w-xl pt-7">
+                <h3 class="display-type text-2xl leading-tight text-ink sm:text-3xl">{client.name}</h3>
+                {client.description && <p class="mt-4 leading-7 text-ink/70">{client.description}</p>}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {otherClients.length > 0 && (
+        <ul class="mt-10 grid grid-cols-2 border-l border-t border-ink/20 sm:grid-cols-3 lg:grid-cols-6">
+          {otherClients.map((client) => (
+            <li class="grid min-h-28 place-items-center border-b border-r border-ink/20 bg-white/55 p-5 text-center text-sm font-black uppercase leading-5 tracking-wide text-ink">
+              {client.logo ? <img src={client.logo} alt={client.name} loading="lazy" class="max-h-14 max-w-full" /> : client.name}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <p class="mt-8 max-w-3xl border-l-4 border-safety pl-5 text-sm leading-6 text-ink/65">
+        A relação inclui atendimentos recorrentes e serviços realizados para veículos dessas operações ao longo da trajetória da oficina.
+      </p>
+    </div>
+  </section>
+)}
