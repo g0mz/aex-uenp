@@ -1,0 +1,30 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import { brands } from '../data/brands';
+---
+
+<section class="section-pad border-b border-ink/15" aria-labelledby="marcas-titulo">
+  <div class="container-site">
+    <div id="marcas-titulo">
+      <SectionTitle eyebrow="Marcas" title="Conhecimento em diferentes caminhões" description="Atendemos todos os tipos de caminhões, com experiência em marcas presentes no transporte rodoviário." singleLine descriptionSingleLine />
+    </div>
+    <ul class="mt-10 grid grid-cols-2 border-l border-t border-ink/20 sm:grid-cols-3 lg:grid-cols-7">
+      {brands.map((brand) => (
+        <li class="group flex min-h-32 min-w-0 flex-col items-center justify-center gap-4 [overflow-wrap:anywhere] border-b border-r border-ink/20 bg-white/40 px-3 py-5 text-center transition-colors hover:bg-safety sm:min-h-36">
+          <span class="display-type text-base sm:text-lg">{brand.name}</span>
+          {brand.customIcon === 'mercedes-star' ? (
+            <svg viewBox="0 0 100 100" role="img" aria-label="Logo Mercedes-Benz" class="size-11 text-ink transition-transform group-hover:scale-105">
+              <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="7" />
+              <path d="M50 50 50 8M50 50 14 71M50 50 86 71" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          ) : brand.svgPath ? (
+            <svg viewBox="0 0 24 24" role="img" aria-label={`Logo ${brand.name}`} class="h-9 w-14 fill-current text-ink transition-transform group-hover:scale-105">
+              <path d={brand.svgPath} />
+            </svg>
+          ) : null}
+        </li>
+      ))}
+    </ul>
+    <p class="mt-4 text-xs text-steel">As marcas são apresentadas apenas como referência dos veículos atendidos.</p>
+  </div>
+</section>
