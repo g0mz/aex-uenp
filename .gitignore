@@ -32,3 +32,6 @@ Thumbs.db
 
 # configuracao local do MCP do Astah (caminho da maquina)
 .mcp.json
+
+# segredos locais
+.dev.vars

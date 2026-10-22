@@ -7,9 +7,12 @@
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "db:migrar": "wrangler d1 migrations apply gaucho-diesel --local",
+    "test": "node --test tests/"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^14.4.2",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource/roboto-condensed": "^5.2.8",
     "@fontsource/roboto-slab": "^5.2.8",
@@ -20,6 +23,8 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.0",
-    "typescript": "^5.7.0"
+    "@cloudflare/workers-types": "^5.20261023.1",
+    "typescript": "^5.7.0",
+    "wrangler": "^4.152.0"
   }
 }

@@ -1,0 +1,11 @@
+{
+  "name": "mecanica-gaucho-diesel",
+  "compatibility_date": "2026-10-01",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gaucho-diesel",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = () => {
   const site = import.meta.env.SITE;
-  const lines = ['User-agent: *', 'Allow: /'];
+  const lines = ['User-agent: *', 'Allow: /', 'Disallow: /painel'];
   if (site) lines.push('', `Sitemap: ${new URL('sitemap-index.xml', site).href}`);
 
   return new Response(`${lines.join('\n')}\n`, {
