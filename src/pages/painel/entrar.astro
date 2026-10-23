@@ -1,0 +1,44 @@
+---
+// UC06 Entrar no painel.
+import { env } from 'cloudflare:workers';
+import '../../styles/global.css';
+import { COOKIE_SESSAO, DURACAO_SESSAO_S, criarSessao, senhaConfere } from '../../lib/sessao';
+
+export const prerender = false;
+
+let erro = '';
+if (Astro.request.method === 'POST') {
+  const senha = String((await Astro.request.formData()).get('senha') ?? '').slice(0, 200);
+  if (await senhaConfere(senha, env.PAINEL_SENHA)) {
+    Astro.cookies.set(COOKIE_SESSAO, await criarSessao(env.SESSAO_SEGREDO), {
+      httpOnly: true, secure: true, sameSite: 'strict', path: '/painel', maxAge: DURACAO_SESSAO_S,
+    });
+    return Astro.redirect('/painel', 303);
+  }
+  erro = 'Senha incorreta.';
+}
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>Entrar | Painel</title>
+  </head>
+  <body>
+    <main class="container-site grid min-h-svh max-w-sm content-center py-8">
+      <div class="border border-ink/20 bg-white p-7 shadow-[8px_8px_0_#051326] sm:p-10">
+        <p class="eyebrow text-steel">Acesso restrito</p>
+        <h1 class="display-type mt-5 text-3xl leading-[1.05]">Painel da oficina</h1>
+        <form method="post" class="mt-6 grid gap-4">
+          <label class="campo">Senha <input type="password" name="senha" autocomplete="current-password" maxlength="200" required autofocus /></label>
+          {erro && <p class="erro" role="alert">{erro}</p>}
+          <button type="submit" class="button-primary">Entrar</button>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
