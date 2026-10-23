@@ -11,6 +11,7 @@
   --color-paper: #eeeade;
   --color-safety: #d9ad16;
   --color-safety-dark: #9b7800;
+  --color-danger: #b42318;
   --font-sans: "Roboto Condensed", Arial, Helvetica, sans-serif;
   --font-display: "Roboto Slab", Rockwell, Georgia, serif;
 }
@@ -154,3 +155,8 @@ a, button {
     transition-duration: 0.01ms !important;
   }
 }
+
+.campo { display: grid; gap: 0.35rem; font-size: 0.875rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-ink); }
+.campo input, .campo select, .campo textarea { min-height: 2.75rem; border: 2px solid rgb(7 26 56 / 0.3); background: white; padding: 0.7rem 0.8rem; font: inherit; font-size: 1rem; font-weight: 400; letter-spacing: 0; text-transform: none; }
+.campo [aria-invalid="true"] { border-color: var(--color-danger); }
+.erro { color: var(--color-danger); font-size: 0.875rem; font-weight: 700; }

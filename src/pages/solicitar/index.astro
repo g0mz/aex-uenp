@@ -1,0 +1,120 @@
+---
+// UC04 Solicitar atendimento, com a extensão UC05 Pedir socorro na rodovia.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import { lerFormulario, validar, LIMITES, TIPOS, PERFIS, type DadosSolicitacao } from '../../lib/solicitacao';
+import { inserir } from '../../lib/repositorio';
+import { services } from '../../data/services';
+
+export const prerender = false;
+
+let dados = lerFormulario(new FormData());
+dados.tipo = Astro.url.searchParams.get('tipo') === 'socorro' ? 'socorro' : 'oficina';
+let erros: Record<string, string> = {};
+let falhaBanco = false;
+
+if (Astro.request.method === 'POST') {
+  dados = lerFormulario(await Astro.request.formData());
+  erros = validar(dados);
+  if (Object.keys(erros).length === 0) {
+    try {
+      const protocolo = await inserir(dados);
+      return Astro.redirect(`/solicitar/enviada?p=${protocolo}&tipo=${dados.tipo}`, 303);
+    } catch {
+      falhaBanco = true;
+    }
+  }
+}
+
+// Atributos comuns de input, select e textarea; o value fica de fora porque o textarea não o aceita.
+const campo = (nome: keyof DadosSolicitacao) => ({
+  id: nome, name: nome, maxlength: LIMITES[nome],
+  'aria-invalid': erros[nome] ? ('true' as const) : undefined,
+  'aria-describedby': erros[nome] ? `${nome}-erro` : undefined,
+});
+const temErros = Object.keys(erros).length > 0;
+---
+
+<BaseLayout title="Solicitar atendimento | Mecânica Gaúcho Diesel" description="Peça atendimento na oficina ou socorro na rodovia para o seu caminhão.">
+  <Header />
+  <main id="conteudo" class="section-pad">
+    <div class="container-site max-w-3xl">
+      <p class="eyebrow text-steel">Atendimento</p>
+      <h1 class="display-type mt-5 text-3xl leading-[1.05] sm:text-4xl">Solicitar atendimento</h1>
+      <p class="mt-5 text-base leading-7 text-steel sm:text-lg">Descreva o problema e os dados do caminhão. O orçamento é feito após o diagnóstico na oficina.</p>
+
+      <div class="mt-10 border border-ink/20 bg-white p-7 shadow-[8px_8px_0_#051326] sm:p-10">
+        {falhaBanco && <p class="erro mb-6" role="alert">Não foi possível salvar, tente novamente.</p>}
+        {temErros && <p class="erro mb-6" role="alert" tabindex="-1" data-resumo-erros>Confira os campos destacados.</p>}
+
+        <form method="post" class="grid gap-5" novalidate data-form>
+          <fieldset class="grid gap-2">
+            <legend class="text-sm font-black uppercase tracking-[0.08em]">Tipo de atendimento</legend>
+            {Object.entries(TIPOS).map(([valor, rotulo]) => (
+              <label class="flex min-h-11 items-center gap-3 border-2 border-ink/30 bg-white p-4 font-bold has-[:checked]:border-ink has-[:checked]:bg-safety/20"><input type="radio" name="tipo" value={valor} checked={dados.tipo === valor} required /> {rotulo}</label>
+            ))}
+            {erros.tipo && <p class="erro">{erros.tipo}</p>}
+          </fieldset>
+
+          <fieldset class="border border-ink/20" data-socorro hidden={dados.tipo !== 'socorro'}>
+            <legend class="px-2 text-sm font-black uppercase tracking-[0.08em]">Onde o caminhão está</legend>
+            <div class="hazard-stripe h-2" aria-hidden="true"></div>
+            <div class="grid gap-4 p-4 sm:grid-cols-3">
+              <label class="campo">Rodovia <input {...campo('rodovia')} value={dados.rodovia} data-obrigatorio-socorro />{erros.rodovia && <span id="rodovia-erro" class="erro">{erros.rodovia}</span>}</label>
+              <label class="campo">Km <input {...campo('km')} value={dados.km} inputmode="numeric" data-obrigatorio-socorro />{erros.km && <span id="km-erro" class="erro">{erros.km}</span>}</label>
+              <label class="campo">Cidade <input {...campo('cidade')} value={dados.cidade} data-obrigatorio-socorro />{erros.cidade && <span id="cidade-erro" class="erro">{erros.cidade}</span>}</label>
+            </div>
+          </fieldset>
+
+          <label class="campo">Perfil
+            <select {...campo('perfil')} required>
+              {Object.entries(PERFIS).map(([valor, rotulo]) => <option value={valor} selected={dados.perfil === valor}>{rotulo}</option>)}
+            </select>
+            {erros.perfil && <span id="perfil-erro" class="erro">{erros.perfil}</span>}
+          </label>
+          <label class="campo">Nome <input {...campo('nome')} value={dados.nome} autocomplete="name" required />{erros.nome && <span id="nome-erro" class="erro">{erros.nome}</span>}</label>
+          <label class="campo">Telefone (WhatsApp) <input {...campo('telefone')} value={dados.telefone} type="tel" autocomplete="tel" required />{erros.telefone && <span id="telefone-erro" class="erro">{erros.telefone}</span>}</label>
+          <label class="campo">Empresa (opcional) <input {...campo('empresa')} value={dados.empresa} autocomplete="organization" /></label>
+          <div class="grid gap-4 sm:grid-cols-3">
+            <label class="campo">Marca <input {...campo('marca')} value={dados.marca} /></label>
+            <label class="campo">Modelo <input {...campo('modelo')} value={dados.modelo} /></label>
+            <label class="campo">Placa <input {...campo('placa')} value={dados.placa} autocapitalize="characters" /></label>
+          </div>
+          <label class="campo">Serviço de interesse
+            <select {...campo('servico')}>
+              <option value="">Não sei informar</option>
+              {services.map((s) => <option selected={dados.servico === s.title}>{s.title}</option>)}
+            </select>
+          </label>
+          <label class="campo">Descrição do problema <textarea {...campo('descricao')} rows="5" required>{dados.descricao}</textarea>{erros.descricao && <span id="descricao-erro" class="erro">{erros.descricao}</span>}</label>
+
+          <button type="submit" class="button-primary justify-self-start" data-enviar>Enviar solicitação</button>
+        </form>
+      </div>
+    </div>
+  </main>
+  <Footer />
+  <WhatsAppButton />
+</BaseLayout>
+
+<script>
+  // UC05: a localização só aparece e só é obrigatória no socorro.
+  const bloco = document.querySelector<HTMLFieldSetElement>('[data-socorro]')!;
+  const atualizar = () => {
+    const socorro = document.querySelector<HTMLInputElement>('input[name="tipo"]:checked')?.value === 'socorro';
+    bloco.hidden = !socorro;
+    bloco.querySelectorAll<HTMLInputElement>('[data-obrigatorio-socorro]').forEach((i) => (i.required = socorro));
+  };
+  document.querySelectorAll('input[name="tipo"]').forEach((r) => r.addEventListener('change', atualizar));
+  atualizar();
+  // Evita envio duplicado: o botão é desabilitado depois da validação nativa.
+  const botao = document.querySelector<HTMLButtonElement>('[data-enviar]')!;
+  document.querySelector<HTMLFormElement>('[data-form]')!.addEventListener('submit', () => {
+    botao.disabled = true;
+    botao.textContent = 'Enviando...';
+  });
+  // Leva o foco ao resumo de erros para o leitor de tela anunciar.
+  document.querySelector<HTMLElement>('[data-resumo-erros]')?.focus();
+</script>

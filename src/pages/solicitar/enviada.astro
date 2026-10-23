@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import { whatsappUrl } from '../../data/company';
+
+export const prerender = false;
+
+const protocolo = Astro.url.searchParams.get('p') ?? '';
+if (!/^GD-\d{4}-\d{6}$/.test(protocolo)) return Astro.redirect('/solicitar');
+const socorro = Astro.url.searchParams.get('tipo') === 'socorro';
+---
+
+<BaseLayout title="Solicitação enviada | Mecânica Gaúcho Diesel" description="Confirmação da solicitação de atendimento." noindex>
+  <Header />
+  <main id="conteudo" class="section-pad">
+    <div class="container-site max-w-3xl">
+      <p class="eyebrow text-steel">Atendimento</p>
+      <h1 class="display-type mt-5 text-3xl leading-[1.05] sm:text-4xl">Solicitação enviada</h1>
+      <div class="mt-8 bg-ink p-7 text-white shadow-[8px_8px_0_#051326] sm:p-10">
+        <p class="text-xs font-black uppercase tracking-[0.16em] text-white/70">Número do protocolo</p>
+        <p class="display-type mt-2 text-3xl text-safety sm:text-4xl">{protocolo}</p>
+      </div>
+      <p class="mt-8 text-base leading-7 text-steel sm:text-lg">A oficina vai analisar o pedido e entrar em contato pelo telefone informado. O orçamento é feito após o diagnóstico na oficina.</p>
+      {socorro && (
+        <p class="mt-4 text-base leading-7 text-steel sm:text-lg">O socorro na rodovia depende do alcance e da disponibilidade do mecânico. Em caso urgente, chame a oficina no <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="font-bold text-ink underline">WhatsApp</a>.</p>
+      )}
+      <a href="/" class="button-secondary mt-8">Voltar ao site</a>
+    </div>
+  </main>
+  <Footer />
+  <WhatsAppButton />
+</BaseLayout>

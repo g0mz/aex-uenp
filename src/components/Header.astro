@@ -1,6 +1,5 @@
 ---
 import BrandMark from './BrandMark.astro';
-import { whatsappUrl } from '../data/company';
 import { clients } from '../data/clients';
 import { portfolio } from '../data/portfolio';
 
@@ -32,7 +31,7 @@ const links = [
     </nav>
 
     <div class="hidden xl:block">
-      <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="button-primary">
+      <a href="/solicitar" class="button-primary">
         Solicitar atendimento
       </a>
     </div>
@@ -62,7 +61,7 @@ const links = [
         </li>
       ))}
       <li class="pt-3">
-        <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="button-primary w-full">Solicitar atendimento</a>
+        <a href="/solicitar" class="button-primary w-full">Solicitar atendimento</a>
       </li>
     </ul>
   </nav>
