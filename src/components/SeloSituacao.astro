@@ -1,0 +1,16 @@
+---
+// Selo da situação: o texto sempre aparece, a cor só reforça.
+import { SITUACOES, type Situacao } from '../lib/solicitacao';
+
+interface Props { situacao: Situacao }
+const { situacao } = Astro.props;
+
+const estilos: Partial<Record<Situacao, string>> = {
+  nova: 'bg-safety text-ink border-ink',
+  recusada: 'bg-white text-danger border-danger',
+  cancelada: 'bg-white text-danger border-danger',
+  concluida: 'bg-ink text-white border-ink',
+};
+---
+
+<span class:list={['inline-block border px-2 py-0.5 text-xs font-black uppercase tracking-wider', estilos[situacao] ?? 'bg-white text-ink border-ink/30']}>{SITUACOES[situacao]}</span>
