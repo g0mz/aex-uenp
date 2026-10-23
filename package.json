@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "db:migrar": "wrangler d1 migrations apply gaucho-diesel --local",
-    "test": "node --test tests/"
+    "test": "node --test \"tests/*.test.ts\""
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.4.2",
