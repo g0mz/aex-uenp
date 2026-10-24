@@ -1,10 +1,12 @@
 {
   "name": "mecanica-gaucho-diesel",
+  "account_id": "236026fbaf8a939b9cba8a855f524ca0",
   "compatibility_date": "2026-10-01",
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "gaucho-diesel",
+      "database_id": "6881213f-c710-4dbb-9500-7eb79444336c",
       "migrations_dir": "migrations"
     }
   ]
