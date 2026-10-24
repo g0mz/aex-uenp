@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { senhaConfere, criarSessao, sessaoValida } from '../src/lib/sessao.ts';
 
 test('compara a senha', async () => {
-  assert.equal(await senhaConfere('gaucho2026', 'gaucho2026'), true);
-  assert.equal(await senhaConfere('errada', 'gaucho2026'), false);
+  assert.equal(await senhaConfere('senha-de-teste', 'senha-de-teste'), true);
+  assert.equal(await senhaConfere('errada', 'senha-de-teste'), false);
   assert.equal(await senhaConfere('', ''), false);
 });
 
