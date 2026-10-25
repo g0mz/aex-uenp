@@ -14,5 +14,9 @@ declare module 'cloudflare:workers' {
     DB: import('@cloudflare/workers-types').D1Database;
     PAINEL_SENHA: string;
     SESSAO_SEGREDO: string;
+    TELEGRAM_BOT_TOKEN: string;
+    TELEGRAM_BOT_USUARIO: string;
+    TELEGRAM_CHAT_PROPRIETARIO: string;
+    TELEGRAM_WEBHOOK_SEGREDO: string;
   };
 }

@@ -20,8 +20,8 @@ if (Astro.request.method === 'POST') {
   erros = validar(dados);
   if (Object.keys(erros).length === 0) {
     try {
-      const protocolo = await inserir(dados);
-      return Astro.redirect(`/solicitar/enviada?p=${protocolo}&tipo=${dados.tipo}`, 303);
+      const { protocolo, telegramCodigo } = await inserir(dados);
+      return Astro.redirect(`/solicitar/enviada?p=${protocolo}&tipo=${dados.tipo}&t=${telegramCodigo}`, 303);
     } catch {
       falhaBanco = true;
     }
