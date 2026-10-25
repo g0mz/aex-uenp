@@ -2,6 +2,10 @@
   "name": "mecanica-gaucho-diesel",
   "account_id": "236026fbaf8a939b9cba8a855f524ca0",
   "compatibility_date": "2026-10-01",
+  "routes": [
+    { "pattern": "mecanicagauchodiesel.com.br/*", "zone_name": "mecanicagauchodiesel.com.br" },
+    { "pattern": "www.mecanicagauchodiesel.com.br/*", "zone_name": "mecanicagauchodiesel.com.br" }
+  ],
   "d1_databases": [
     {
       "binding": "DB",
