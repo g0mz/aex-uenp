@@ -1,6 +1,6 @@
 # Mecânica Gaúcho Diesel: requisitos e histórias de usuário
 
-Versão 1.0, validada com o proprietário da oficina. Este documento foi elaborado a partir de um questionário sobre a rotina da oficina, que substituiu a entrevista presencial.
+Versão 0.2, evolução da versão 0.1 validada com o proprietário da oficina. Este documento foi elaborado a partir de um questionário sobre a rotina da oficina, que substituiu a entrevista presencial.
 
 ## 1. Problema
 
@@ -20,6 +20,7 @@ Os pedidos chegam por ligação ou WhatsApp, com um relato livre do problema. O 
 | Mecânico e ajudante | Executam o serviço | Não usam o sistema |
 | WhatsApp (sistema externo) | Canal de conversa com o cliente | |
 | Google Maps (sistema externo) | Localização da oficina | |
+| Telegram (sistema externo) | Canal de avisos para o proprietário e para o cliente que ativou o acompanhamento | |
 
 ## 3. Escopo
 
@@ -41,6 +42,7 @@ Fora desta versão, porque a oficina já usa um sistema interno no computador:
 - RN04: uma solicitação exige nome, telefone e descrição do problema. A localização é obrigatória quando o tipo for socorro.
 - RN05: somente o proprietário autenticado acessa o painel.
 - RN06: uma solicitação fora do escopo da oficina é recusada com o motivo registrado.
+- RN07: o cliente só recebe avisos pelo Telegram se tocou em "Iniciar" no bot a partir do link do próprio pedido. Uma falha no envio do aviso nunca impede a gravação nem a alteração da solicitação.
 
 ## 5. Requisitos funcionais
 
@@ -56,6 +58,9 @@ Fora desta versão, porque a oficina já usa um sistema interno no computador:
 | RF08 | Exibir o detalhe de uma solicitação, com atalho para o WhatsApp do cliente | Q3 |
 | RF09 | Alterar a situação da solicitação e registrar observações e motivo de recusa | Q3, RN06 |
 | RF10 | Excluir solicitação duplicada ou de teste | Proprietário |
+| RF12 | Consultar a situação de uma solicitação pelo protocolo e telefone | HU13 |
+| RF13 | Avisar o cliente pelo Telegram quando a situação muda, se ele ativou os avisos | HU14, RN07 |
+| RF14 | Avisar o proprietário pelo Telegram a cada solicitação nova | HU15 |
 | RF11 (desejável) | Cadastrar, editar e remover os serviços exibidos no site | Q11 |
 
 ## 6. Requisitos não funcionais
@@ -105,6 +110,16 @@ Como caminhoneiro com o caminhão parado, quero pedir socorro informando onde es
 Como representante de empresa, quero ver os principais clientes atendidos para decidir se confio a manutenção da minha frota à oficina.
 - [ ] A seção de clientes lista as empresas autorizadas.
 
+**HU13. Acompanhar minha solicitação** (S, RF12)
+Como cliente, quero consultar a situação do meu pedido pelo protocolo para saber em que etapa ele está.
+- [ ] Com protocolo e telefone corretos, a página mostra a situação, a data da última atualização e o motivo da recusa, se houver.
+- [ ] Com dados errados, a página mostra "Solicitação não encontrada" sem dizer qual dado está errado.
+
+**HU14. Ser avisado da resposta** (S, RF13, RN07)
+Como cliente, quero receber no Telegram as mudanças de situação do meu pedido para não precisar abrir o site.
+- [ ] A confirmação tem o botão "Receber atualizações no Telegram".
+- [ ] Depois de iniciar o bot, cada mudança de situação chega com o protocolo, a nova situação e o motivo da recusa, se houver.
+
 ### Proprietário
 
 **HU07. Entrar no painel** (M, RF06)
@@ -131,6 +146,10 @@ Como proprietário, quero alterar a situação do pedido e registrar observaçõ
 **HU11. Excluir pedido** (M, RF10)
 Como proprietário, quero excluir pedidos duplicados ou de teste para manter a lista organizada.
 - [ ] O sistema pede confirmação antes de excluir.
+
+**HU15. Ser avisado de pedido novo** (M, RF14)
+Como proprietário, quero receber no Telegram cada solicitação nova para responder sem ficar olhando o painel.
+- [ ] Cada solicitação gravada gera uma mensagem com protocolo, tipo, nome, telefone, trecho da descrição (e local, no socorro) e o link do detalhe no painel.
 
 **HU12. Manter os serviços do site** (C, RF11)
 Como proprietário, quero cadastrar e editar os serviços exibidos para atualizar o site sem alterar o código.
@@ -167,19 +186,22 @@ O diagrama está em `docs/uml/casos-de-uso.asta`. Cada caso de uso deriva de uma
 | UC10 Registrar motivo da recusa | Proprietário | estende UC09 | HU10 (RN06) |
 | UC11 Excluir solicitação | Proprietário | | HU11 |
 | UC12 Chamar cliente no WhatsApp | Proprietário, WhatsApp | estende UC08 | HU09 |
+| UC13 Acompanhar solicitação | Cliente | | HU13 |
+| UC14 Avisar cliente | Telegram | estende UC09 | HU14 |
+| UC15 Avisar proprietário | Telegram | incluído por UC04 | HU15 |
 
 Caminhoneiro autônomo, motorista de frota e representante de empresa são especializações de Cliente. A HU12 (desejável) ficou fora desta versão e por isso não aparece no diagrama.
 
 ## 10. Diagramas de atividades
 
-Os diagramas estão em `docs/uml/atividades.asta`, um para cada caso de uso (UC01 a UC12). Todos os casos de uso foram modelados, e a tabela abaixo detalha os dois que gravam dados no banco. Cada diagrama tem uma raia para o ator do caso de uso, uma para o Sistema e, quando o caso de uso envolve WhatsApp ou Google Maps, uma para esse sistema externo. Os diagramas das extensões UC05, UC10 e UC12 mostram apenas o trecho que cada uma acrescenta ao caso de uso base.
+Os diagramas estão em `docs/uml/atividades.asta`, um para cada caso de uso (UC01 a UC15). Todos os casos de uso foram modelados, e a tabela abaixo detalha os dois que gravam dados no banco. Cada diagrama tem uma raia para o ator do caso de uso, uma para o Sistema e, quando o caso de uso envolve WhatsApp ou Google Maps, uma para esse sistema externo. Os diagramas das extensões UC05, UC10 e UC12 mostram apenas o trecho que cada uma acrescenta ao caso de uso base.
 
 | Diagrama | Caso de uso | Pontos de decisão | Regras |
 |---|---|---|---|
 | UC04 Solicitar atendimento | UC04, com a extensão UC05 | Tipo de atendimento (oficina ou socorro); campos obrigatórios preenchidos | RN03, RN04 |
 | UC09 Alterar situação | UC09, com a extensão UC10 | Nova situação é Recusada; recusa com motivo | RN06 |
 
-No UC04, a localização só é pedida no ramo de socorro, e o formulário volta ao preenchimento enquanto faltarem dados. No UC09, a recusa só é gravada com o motivo informado. Toda solicitação nova é registrada com a situação "Nova", primeira etapa do ciclo da seção 8.
+No UC04, a localização só é pedida no ramo de socorro, e o formulário volta ao preenchimento enquanto faltarem dados. No UC09, a recusa só é gravada com o motivo informado. Toda solicitação nova é registrada com a situação "Nova", primeira etapa do ciclo da seção 8. O UC04 e o UC09 terminam com o aviso pelo Telegram (UC15 e UC14), enviado depois da gravação e sem bloquear o fluxo: se o envio falhar, a solicitação ou a nova situação continua gravada.
 
 ## 11. Diagrama de classes
 
@@ -190,10 +212,13 @@ O diagrama está em `docs/uml/classes.asta`.
 | Solicitacao | UC04, UC05, UC07 a UC11; atividades de UC04 e UC09 | Tabela `solicitacao` no D1 |
 | Cliente | Dados do formulário (RF04) | Colunas `nome`, `telefone`, `empresa` e `perfil` da tabela `solicitacao` |
 | Caminhao | Dados do formulário (RF04) | Colunas `marca`, `modelo` e `placa` da tabela `solicitacao` |
-| SolicitacaoRepositorio | Cadastrar (UC04), listar (UC07), consultar (UC08), alterar (UC09) e excluir (UC11) | Executa as consultas SQL no D1 |
+| SolicitacaoRepositorio | Cadastrar (UC04), listar (UC07), consultar (UC08), alterar (UC09), excluir (UC11), acompanhar (UC13) e vincular Telegram (UC14) | Executa as consultas SQL no D1 |
+| Notificador | UC14 e UC15; dependência de UC04 e UC09 | Não é gravado: envia as mensagens pela API do Telegram, com `avisarProprietario(s)` e `avisarCliente(s)` |
 | Proprietario | UC06 Entrar no painel (RF06) | Não é gravado: a senha fica em um segredo do servidor (RNF05) |
 | TipoAtendimento, PerfilCliente, Situacao | RF04 e seção 8 | Texto com valores restritos (`CHECK`) |
 
 Cliente e Caminhao estão em composição com Solicitacao porque só existem dentro de um pedido. A oficina não mantém cadastro de clientes nem de veículos neste sistema (seção 3), então os dois ficam na mesma tabela. O repositório reúne as quatro operações do CRUD exigido pela AEX de PI.
+
+A classe Solicitacao ganha os atributos `telegramCodigo` (código aleatório do link do bot) e `telegramChatId` (conversa do cliente, preenchida quando ele inicia o bot). O repositório ganha `acompanhar(protocolo, telefone)`, que devolve apenas protocolo, tipo, situação, motivo da recusa e data de atualização, e `vincularTelegram(codigo, chatId)`.
 
 Regras nas operações: `validar()` aplica a RN04 (nome, telefone e descrição obrigatórios, e localização obrigatória no socorro); `gerarProtocolo()` atende a RF05; `alterarSituacao()` exige o motivo quando a nova situação é Recusada (RN06).
