@@ -57,7 +57,7 @@ const linhas: [string, string | null][] = [
 ---
 
 <PainelLayout title={s.protocolo ?? `Solicitação ${s.id}`}>
-  <a href="/painel" class="inline-flex min-h-11 items-center font-bold underline">Voltar à lista</a>
+  <a href="/painel" class="flex min-h-11 w-fit items-center font-bold underline">Voltar à lista</a>
   <p class="eyebrow mt-2 text-steel">Solicitação</p>
   <h1 class="display-type mt-5 text-3xl leading-[1.05] sm:text-4xl">{s.protocolo ?? `Solicitação ${s.id}`}</h1>
   <p class="mt-3"><SeloSituacao situacao={s.situacao} /></p>
