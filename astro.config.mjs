@@ -8,7 +8,7 @@ export default defineConfig({
   adapter: cloudflare(),
   site: 'https://mecanicagauchodiesel.com.br',
   security: { checkOrigin: true },
-  integrations: [sitemap({ filter: (page) => !page.includes('/painel') && !page.includes('/solicitar/enviada') })],
+  integrations: [sitemap({ filter: (page) => !page.includes('/painel') && !page.includes('/solicitar/enviada') && !page.includes('/acompanhar') })],
   vite: {
     plugins: [tailwindcss()],
   },

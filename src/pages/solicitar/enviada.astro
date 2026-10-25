@@ -4,11 +4,15 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import WhatsAppButton from '../../components/WhatsAppButton.astro';
 import { whatsappUrl } from '../../data/company';
+import { env } from 'cloudflare:workers';
 
 export const prerender = false;
 
 const protocolo = Astro.url.searchParams.get('p') ?? '';
 if (!/^GD-\d{4}-\d{6}$/.test(protocolo)) return Astro.redirect('/solicitar');
+const codigo = Astro.url.searchParams.get('t') ?? '';
+const telegram = /^[0-9a-f]{32}$/.test(codigo) && /^\w+$/.test(env.TELEGRAM_BOT_USUARIO ?? '')
+  ? `https://t.me/${env.TELEGRAM_BOT_USUARIO}?start=${codigo}` : '';
 const socorro = Astro.url.searchParams.get('tipo') === 'socorro';
 ---
 
@@ -26,7 +30,16 @@ const socorro = Astro.url.searchParams.get('tipo') === 'socorro';
       {socorro && (
         <p class="mt-4 text-base leading-7 text-steel sm:text-lg">O socorro na rodovia depende do alcance e da disponibilidade do mecânico. Em caso urgente, chame a oficina no <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="font-bold text-ink underline">WhatsApp</a>.</p>
       )}
-      <a href="/" class="button-secondary mt-8">Voltar ao site</a>
+      {telegram && (
+        <div class="mt-8">
+          <a href={telegram} target="_blank" rel="noopener noreferrer" class="button-primary">Receber atualizações no Telegram</a>
+          <p class="mt-3 text-sm leading-6 text-steel">Opcional. Ao tocar em "Iniciar" no bot, você recebe uma mensagem a cada mudança de situação do pedido.</p>
+        </div>
+      )}
+      <div class="mt-8 flex flex-wrap items-center gap-6">
+        <a href={`/acompanhar?p=${protocolo}`} class="button-secondary">Acompanhar solicitação</a>
+        <a href="/" class="font-bold underline">Voltar ao site</a>
+      </div>
     </div>
   </main>
   <Footer />
