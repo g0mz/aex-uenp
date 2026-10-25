@@ -5,7 +5,9 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import WhatsAppButton from '../../components/WhatsAppButton.astro';
 import { lerFormulario, validar, LIMITES, TIPOS, PERFIS, type DadosSolicitacao } from '../../lib/solicitacao';
-import { inserir } from '../../lib/repositorio';
+import { inserir, buscar } from '../../lib/repositorio';
+import { avisarProprietario } from '../../lib/notificador';
+import { env } from 'cloudflare:workers';
 import { services } from '../../data/services';
 
 export const prerender = false;
@@ -20,7 +22,12 @@ if (Astro.request.method === 'POST') {
   erros = validar(dados);
   if (Object.keys(erros).length === 0) {
     try {
-      const { protocolo, telegramCodigo } = await inserir(dados);
+      const { id, protocolo, telegramCodigo } = await inserir(dados);
+      // UC15: aviso ao proprietário depois da resposta, sem atrasar o redirecionamento.
+      Astro.locals.cfContext.waitUntil((async () => {
+        const nova = await buscar(id);
+        if (nova) await avisarProprietario(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_PROPRIETARIO, nova, `${Astro.url.origin}/painel/${id}`);
+      })().catch(() => {}));
       return Astro.redirect(`/solicitar/enviada?p=${protocolo}&tipo=${dados.tipo}&t=${telegramCodigo}`, 303);
     } catch {
       falhaBanco = true;

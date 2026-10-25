@@ -3,6 +3,8 @@
 import PainelLayout from '../../layouts/PainelLayout.astro';
 import SeloSituacao from '../../components/SeloSituacao.astro';
 import { atualizar, buscar, excluir } from '../../lib/repositorio';
+import { avisarCliente } from '../../lib/notificador';
+import { env } from 'cloudflare:workers';
 import { alterarSituacao, LIMITE_ANOTACAO, PERFIS, SITUACOES, TIPOS } from '../../lib/solicitacao';
 
 export const prerender = false;
@@ -29,7 +31,15 @@ if (Astro.request.method === 'POST') {
   erro = alterarSituacao(form.situacao, form.motivo, form.observacao).erro ?? '';
   if (!erro) {
     try {
+      const antes = await buscar(id);
       await atualizar(id, form.situacao, form.observacao, form.motivo);
+      // UC14: avisa o cliente só se a situação mudou e ele ativou o Telegram.
+      if (antes?.telegram_chat_id && antes.situacao !== form.situacao) {
+        Astro.locals.cfContext.waitUntil((async () => {
+          const depois = await buscar(id);
+          if (depois) await avisarCliente(env.TELEGRAM_BOT_TOKEN, depois, `${Astro.url.origin}/acompanhar?p=${depois.protocolo}`);
+        })().catch(() => {}));
+      }
       return Astro.redirect(`/painel/${id}?salvo`, 303);
     } catch {
       erro = 'Não foi possível salvar, tente novamente.';
