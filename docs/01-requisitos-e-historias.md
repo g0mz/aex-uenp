@@ -1,6 +1,6 @@
 # Mecânica Gaúcho Diesel: requisitos e histórias de usuário
 
-Versão 0.2, evolução da versão 0.1 validada com o proprietário da oficina. Este documento foi elaborado a partir de um questionário sobre a rotina da oficina, que substituiu a entrevista presencial.
+Versão 0.2, evolução da versão 0.1. Este documento foi elaborado a partir de um questionário sobre a rotina da oficina, que substituiu a entrevista presencial.
 
 ## 1. Problema
 
