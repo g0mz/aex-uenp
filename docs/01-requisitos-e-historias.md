@@ -37,7 +37,7 @@ Fora desta versão, porque a oficina já usa um sistema interno no computador:
 ## 4. Regras de negócio
 
 - RN01: o orçamento só é feito após o diagnóstico na oficina. O sistema não gera orçamento.
-- RN02: serviços rápidos de preço fixo, como o diagnóstico eletrônico por scanner, podem ser informados como "preço fixo". O valor ainda será definido com o proprietário.
+- RN02: serviços rápidos de preço fixo, como o diagnóstico eletrônico por scanner, podem ser informados como "preço fixo". O valor ainda será definido com o proprietário, e a regra depende do cadastro de serviços (HU12, RF11), que ficou fora desta versão.
 - RN03: o socorro na rodovia depende do alcance e da disponibilidade do mecânico. O proprietário analisa toda solicitação de socorro, e o sistema não a confirma automaticamente.
 - RN04: uma solicitação exige nome, telefone e descrição do problema. A localização é obrigatória quando o tipo for socorro.
 - RN05: somente o proprietário autenticado acessa o painel.
@@ -140,7 +140,7 @@ Como proprietário, quero abrir um pedido e chamar o cliente no WhatsApp para en
 
 **HU10. Atualizar a situação** (M, RF09)
 Como proprietário, quero alterar a situação do pedido e registrar observações para acompanhar a etapa de cada caminhão.
-- [ ] As situações seguem o ciclo definido na seção 8.
+- [ ] As situações são as da seção 8, e "Socorro a caminho" só aparece em pedidos de socorro.
 - [ ] A recusa exige um motivo (RN06).
 
 **HU11. Excluir pedido** (M, RF10)
@@ -162,7 +162,7 @@ Como proprietário, quero cadastrar e editar os serviços exibidos para atualiza
 | Nova | A solicitação chegou pelo site |
 | Em análise | O proprietário está conversando com o cliente |
 | Recusada | O pedido está fora do escopo ou não há disponibilidade (com motivo) |
-| Socorro a caminho | O socorro na rodovia foi aceito |
+| Socorro a caminho | O socorro na rodovia foi aceito (só em pedidos de socorro) |
 | Aguardando caminhão | O cliente levará o caminhão até a oficina |
 | Em serviço | O caminhão está na oficina para diagnóstico e reparo |
 | Concluída | O caminhão foi entregue |
@@ -194,14 +194,14 @@ Caminhoneiro autônomo, motorista de frota e representante de empresa são espec
 
 ## 10. Diagramas de atividades
 
-Os diagramas estão em `docs/uml/atividades.asta`, um para cada caso de uso (UC01 a UC15). Todos os casos de uso foram modelados, e a tabela abaixo detalha os dois que gravam dados no banco. Cada diagrama tem uma raia para o ator do caso de uso, uma para o Sistema e, quando o caso de uso envolve WhatsApp ou Google Maps, uma para esse sistema externo. Os diagramas das extensões UC05, UC10 e UC12 mostram apenas o trecho que cada uma acrescenta ao caso de uso base.
+Os diagramas estão em `docs/uml/atividades.asta`, um para cada caso de uso (UC01 a UC15). Todos os casos de uso foram modelados, e a tabela abaixo detalha os dois que inserem e alteram solicitações e têm mais regras. Cada diagrama tem uma raia para o ator do caso de uso, uma para o Sistema e, quando o caso de uso envolve WhatsApp ou Google Maps, uma para esse sistema externo. Os diagramas das extensões UC05, UC10 e UC12 mostram apenas o trecho que cada uma acrescenta ao caso de uso base.
 
 | Diagrama | Caso de uso | Pontos de decisão | Regras |
 |---|---|---|---|
 | UC04 Solicitar atendimento | UC04, com a extensão UC05 | Tipo de atendimento (oficina ou socorro); campos obrigatórios preenchidos | RN03, RN04 |
 | UC09 Alterar situação | UC09, com a extensão UC10 | Nova situação é Recusada; recusa com motivo | RN06 |
 
-No UC04, a localização só é pedida no ramo de socorro, e o formulário volta ao preenchimento enquanto faltarem dados. No UC09, a recusa só é gravada com o motivo informado. Toda solicitação nova é registrada com a situação "Nova", primeira etapa do ciclo da seção 8. O UC04 e o UC09 terminam com o aviso pelo Telegram (UC15 e UC14), enviado depois da gravação e sem bloquear o fluxo: se o envio falhar, a solicitação ou a nova situação continua gravada.
+No UC04, a localização só é pedida no ramo de socorro, e o formulário volta ao preenchimento enquanto faltarem dados. No UC09, a recusa só é gravada com o motivo informado. Toda solicitação nova é registrada com a situação "Nova", primeira situação da seção 8. O UC04 e o UC09 terminam com o aviso pelo Telegram (UC15 e UC14), enviado depois da gravação e sem bloquear o fluxo: se o envio falhar, a solicitação ou a nova situação continua gravada.
 
 ## 11. Diagrama de classes
 
