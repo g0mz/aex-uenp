@@ -5,7 +5,7 @@ import SeloSituacao from '../../components/SeloSituacao.astro';
 import { atualizar, buscar, excluir } from '../../lib/repositorio';
 import { avisarCliente } from '../../lib/notificador';
 import { env } from 'cloudflare:workers';
-import { alterarSituacao, LIMITE_ANOTACAO, PERFIS, SITUACOES, TIPOS } from '../../lib/solicitacao';
+import { alterarSituacao, situacoesDoTipo, LIMITE_ANOTACAO, PERFIS, SITUACOES, TIPOS } from '../../lib/solicitacao';
 
 export const prerender = false;
 
@@ -28,13 +28,14 @@ if (Astro.request.method === 'POST') {
     observacao: String(dados.get('observacao') ?? '').trim(),
     motivo: String(dados.get('motivo') ?? '').trim(),
   };
-  erro = alterarSituacao(form.situacao, form.motivo, form.observacao).erro ?? '';
+  const antes = await buscar(id);
+  if (!antes) return naoEncontrada();
+  erro = alterarSituacao(form.situacao, form.motivo, form.observacao, antes.tipo).erro ?? '';
   if (!erro) {
     try {
-      const antes = await buscar(id);
       await atualizar(id, form.situacao, form.observacao, form.motivo);
       // UC14: avisa o cliente só se a situação mudou e ele ativou o Telegram.
-      if (antes?.telegram_chat_id && antes.situacao !== form.situacao) {
+      if (antes.telegram_chat_id && antes.situacao !== form.situacao) {
         Astro.locals.cfContext.waitUntil((async () => {
           const depois = await buscar(id);
           if (depois) await avisarCliente(env.TELEGRAM_BOT_TOKEN, depois, `${Astro.url.origin}/acompanhar?p=${depois.protocolo}`);
@@ -84,7 +85,7 @@ const linhas: [string, string | null][] = [
     {salvo && !erro && <p role="status" class="font-bold">Situação atualizada.</p>}
     <label class="campo">Situação
       <select name="situacao" data-situacao>
-        {Object.entries(SITUACOES).map(([v, r]) => <option value={v} selected={form.situacao === v}>{r}</option>)}
+        {situacoesDoTipo(s.tipo).map((v) => <option value={v} selected={form.situacao === v}>{SITUACOES[v]}</option>)}
       </select>
     </label>
     <label class="campo" data-motivo hidden={form.situacao !== 'recusada'}>Motivo da recusa

@@ -61,9 +61,16 @@ export function gerarProtocolo(id: number, ano: number): string {
   return `GD-${ano}-${String(id).padStart(6, '0')}`;
 }
 
+// Tabela de situações: "Socorro a caminho" só vale para pedidos de socorro.
+export function situacoesDoTipo(tipo: string): Situacao[] {
+  const todas = Object.keys(SITUACOES) as Situacao[];
+  return tipo === 'socorro' ? todas : todas.filter((s) => s !== 'socorro_a_caminho');
+}
+
 // RN06: a recusa só é aceita com motivo.
-export function alterarSituacao(nova: string, motivo: string, observacao = ''): { erro?: string } {
+export function alterarSituacao(nova: string, motivo: string, observacao = '', tipo = 'socorro'): { erro?: string } {
   if (!pertence(SITUACOES, nova)) return { erro: 'Situação inválida.' };
+  if (!situacoesDoTipo(tipo).includes(nova as Situacao)) return { erro: 'Esta situação não vale para pedidos na oficina.' };
   if (nova === 'recusada' && !motivo.trim()) return { erro: 'Informe o motivo da recusa.' };
   if (motivo.length > LIMITE_ANOTACAO || observacao.length > LIMITE_ANOTACAO) {
     return { erro: `Use no máximo ${LIMITE_ANOTACAO} caracteres no motivo e na observação.` };

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { validar, gerarProtocolo, alterarSituacao, lerFormulario, type DadosSolicitacao } from '../src/lib/solicitacao.ts';
+import { validar, gerarProtocolo, alterarSituacao, situacoesDoTipo, lerFormulario, type DadosSolicitacao } from '../src/lib/solicitacao.ts';
 
 const base: DadosSolicitacao = {
   tipo: 'oficina', perfil: 'autonomo', nome: 'João', telefone: '14999990000', empresa: '',
@@ -54,4 +54,11 @@ test('RN06: recusa exige motivo', () => {
   assert.ok(alterarSituacao('inexistente', '').erro);
   assert.ok(alterarSituacao('constructor', '').erro);
   assert.ok(alterarSituacao('em_analise', '', 'a'.repeat(1001)).erro);
+});
+
+test('Socorro a caminho só vale para pedidos de socorro', () => {
+  assert.ok(alterarSituacao('socorro_a_caminho', '', '', 'oficina').erro);
+  assert.deepEqual(alterarSituacao('socorro_a_caminho', '', '', 'socorro'), {});
+  assert.deepEqual(situacoesDoTipo('oficina').includes('socorro_a_caminho'), false);
+  assert.equal(situacoesDoTipo('socorro').length, 8);
 });
