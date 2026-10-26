@@ -49,6 +49,24 @@ npm test
 
 Executa os testes das regras de negócio (validação da solicitação, protocolo, situações e sessão do painel). O comando equivale a `node --test "tests/*.test.ts"`.
 
+## Avisos pelo Telegram
+
+O proprietário recebe cada solicitação nova no Telegram, e o cliente pode receber as mudanças de situação do pedido. Os avisos são opcionais: sem os segredos abaixo, o sistema funciona normalmente e não envia nada.
+
+1. No Telegram, abrir o @BotFather, enviar `/newbot` e seguir as instruções. Ele informa o token do bot e o nome de usuário do bot.
+2. Definir os quatro segredos no Worker (em `.dev.vars` no computador, ou com `wrangler secret put` em produção):
+   - `TELEGRAM_BOT_TOKEN`: token informado pelo BotFather;
+   - `TELEGRAM_BOT_USUARIO`: nome de usuário do bot, sem o `@`;
+   - `TELEGRAM_CHAT_PROPRIETARIO`: número do chat do proprietário;
+   - `TELEGRAM_WEBHOOK_SEGREDO`: texto aleatório longo, usado para o Telegram provar que é o autor das chamadas.
+3. Registrar o webhook do bot, uma única vez:
+   ```bash
+   curl "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://<dominio>/telegram&secret_token=<SEGREDO>"
+   ```
+4. O proprietário abre o bot e envia `/id`. A resposta traz o número do chat, que vai em `TELEGRAM_CHAT_PROPRIETARIO`.
+
+O cliente ativa os avisos pelo botão "Receber atualizações no Telegram" da página de confirmação. Em produção, a regra de limite de requisições da Cloudflare deve cobrir também o `POST` em `/acompanhar`, além de `/painel/entrar` e `/solicitar`.
+
 ## Rastreabilidade
 
 Cada rota do sistema corresponde a um caso de uso e a uma história de usuário, descritos em `docs/01-requisitos-e-historias.md`.
@@ -61,5 +79,7 @@ Cada rota do sistema corresponde a um caso de uso e a uma história de usuário,
 | `/painel/entrar` e `/painel/sair` | `src/pages/painel/entrar.astro` e `sair.ts` | UC06 | HU07 |
 | `/painel` | `src/pages/painel/index.astro` | UC07 | HU08 |
 | `/painel/[id]` | `src/pages/painel/[id].astro` | UC08 a UC12 | HU09, HU10, HU11 |
+| `/acompanhar` | `src/pages/acompanhar.astro` | UC13 | HU13 |
+| `/telegram` | `src/pages/telegram.ts` | UC14, UC15 | HU14, HU15 |
 
-A tabela `solicitacao` está em `migrations/0001_solicitacao.sql`, as regras de negócio em `src/lib/solicitacao.ts`, o acesso ao banco em `src/lib/repositorio.ts` e a sessão do proprietário em `src/lib/sessao.ts` e `src/middleware.ts`.
+As mensagens do Telegram são montadas em `src/lib/notificador.ts`. A tabela `solicitacao` está em `migrations/0001_solicitacao.sql` e `migrations/0002_telegram.sql`, as regras de negócio em `src/lib/solicitacao.ts`, o acesso ao banco em `src/lib/repositorio.ts` e a sessão do proprietário em `src/lib/sessao.ts` e `src/middleware.ts`.

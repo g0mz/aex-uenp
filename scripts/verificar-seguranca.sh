@@ -8,6 +8,7 @@ OWN="Origin: $BASE"
 cd "$(dirname "$0")/.." || exit 1
 SENHA=$(grep '^PAINEL_SENHA=' .dev.vars | cut -d= -f2- | tr -d '\r')
 SEGREDO=$(grep '^SESSAO_SEGREDO=' .dev.vars | cut -d= -f2- | tr -d '\r')
+WEBHOOK=$(grep '^TELEGRAM_WEBHOOK_SEGREDO=' .dev.vars | cut -d= -f2- | tr -d '')
 T=$(mktemp -d); trap 'rm -rf "$T"' EXIT
 FALHAS=0
 
@@ -111,6 +112,24 @@ req "$BASE/sitemap-index.xml" >/dev/null
 TODOS=$(cat "$T/body")
 for u in $(grep -o 'https\?://[^<]*sitemap-[0-9]*\.xml' "$T/body" | sed -E "s#https?://[^/]*#$BASE#"); do req "$u" >/dev/null; TODOS="$TODOS $(cat "$T/body")"; done
 { echo "$TODOS" | grep -q 'loc' && ! echo "$TODOS" | grep -q '/painel'; }; confere "sitemap lido e sem URL do painel" $?
+
+echo "== Acompanhamento e webhook do Telegram"
+req -X POST "$BASE/solicitar" -H "$OWN" --data-urlencode "tipo=oficina" --data-urlencode "perfil=autonomo" --data-urlencode "telefone=(14) 99999-0000" --data-urlencode "nome=Cliente Secreto" --data-urlencode "descricao=Acompanhar" >/dev/null
+PROT2=$(sql "SELECT protocolo AS n FROM solicitacao WHERE nome='Cliente Secreto' ORDER BY id DESC LIMIT 1")
+s=$(req -X POST "$BASE/acompanhar" -H "$OWN" --data-urlencode "protocolo=$PROT2" --data-urlencode "telefone=14 00000-0000")
+{ grep -q 'não encontrada' "$T/body" && ! grep -q 'Cliente Secreto' "$T/body"; }; confere "/acompanhar com telefone errado: não encontrada e sem nome ($s)" $?
+s=$(req -X POST "$BASE/acompanhar" -H "$OWN" --data-urlencode "protocolo=$PROT2" --data-urlencode "telefone=14999990000")
+{ [ -n "$PROT2" ] && grep -q "$PROT2" "$T/body" && ! grep -q 'Cliente Secreto' "$T/body" && ! grep -q '99999' "$T/body"; }; confere "/acompanhar com dados certos mostra só a situação ($s)" $?
+for p in "GD-1" "x' OR 1=1--" "<script>alert(1)</script>"; do
+  s=$(req -X POST "$BASE/acompanhar" -H "$OWN" --data-urlencode "protocolo=$p" --data-urlencode "telefone=1")
+  { [ "$s" = 200 ] && grep -q 'não encontrada' "$T/body" && ! grep -q '<script>alert' "$T/body"; }; confere "/acompanhar com protocolo '$p': 200 genérico ($s)" $?
+done
+HOOK='{"message":{"text":"/start 00000000000000000000000000000000","chat":{"id":123}}}'
+s=$(req -X POST "$BASE/telegram" -H "Content-Type: application/json" -d "$HOOK"); [ "$s" = 403 ]; confere "POST /telegram sem segredo ($s)" $?
+s=$(req -X POST "$BASE/telegram" -H "Content-Type: application/json" -H "X-Telegram-Bot-Api-Secret-Token: errado" -d "$HOOK"); [ "$s" = 403 ]; confere "POST /telegram com segredo errado ($s)" $?
+s=$(req -X POST "$BASE/telegram" -H "Content-Type: application/json" -H "X-Telegram-Bot-Api-Secret-Token: $WEBHOOK" -d "$HOOK")
+{ [ "$s" = 200 ] && [ "$(contagem "WHERE telegram_chat_id IS NOT NULL")" = 0 ]; }; confere "POST /telegram com segredo certo e código inexistente: 200 sem vincular ($s)" $?
+req "$BASE/robots.txt" >/dev/null; grep -q 'Disallow: /telegram' "$T/body"; confere "robots.txt com Disallow: /telegram" $?
 
 echo "== A10 Exceções"
 for c in /painel/abc /painel/99999999999999999999 /painel/99999; do
