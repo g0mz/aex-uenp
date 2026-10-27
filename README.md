@@ -1,6 +1,6 @@
 # Mecânica Gaúcho Diesel
 
-Sistema web da Mecânica Gaúcho Diesel, oficina de caminhões em Ourinhos (SP). O sistema reúne o site institucional, o formulário de solicitação de atendimento (na oficina ou socorro na rodovia), o banco de dados e o painel do proprietário, onde as solicitações são recebidas, analisadas e acompanhadas.
+Sistema web da Mecânica Gaúcho Diesel, oficina de caminhões em Ourinhos (SP). O site institucional, especificado e modelado na AEX de Engenharia de Software II (versão 1.0 da especificação), já está publicado. Esta etapa, da AEX de Programação para Internet, evolui a modelagem para a versão 2.0 e acrescenta ao site o formulário de solicitação de atendimento (na oficina ou socorro na rodovia), o banco de dados e o painel do proprietário, onde as solicitações são recebidas, analisadas e acompanhadas.
 
 Trabalho da AEX integrada de Engenharia de Software II e Programação para Internet.
 
@@ -12,6 +12,8 @@ Trabalho da AEX integrada de Engenharia de Software II e Programação para Inte
 - José Neres
 - Pedro Gomes
 
+O grupo desenvolveu o sistema em conjunto, em um único computador. Por isso os commits do repositório estão todos no nome de Pedro Gomes, e não refletem a participação dos cinco integrantes.
+
 ## Tecnologias
 
 - Astro, para as páginas do site e do painel
@@ -22,7 +24,7 @@ Trabalho da AEX integrada de Engenharia de Software II e Programação para Inte
 - TypeScript, para as regras de negócio, o acesso ao banco e a sessão do painel
 - API de bots do Telegram, para os avisos ao proprietário e ao cliente
 - Node.js, com o executor de testes `node --test`
-- Astah UML, para os diagramas de casos de uso, atividades e classes
+- Astah UML, para os diagramas de casos de uso, atividades e classes da modelagem de Engenharia de Software II
 
 ## Como executar
 
@@ -77,13 +79,13 @@ Cada rota do sistema corresponde a um caso de uso e a uma história de usuário,
 
 | Rota | Arquivo | Caso de uso | História |
 |---|---|---|---|
-| `/` | `src/pages/index.astro` | UC01, UC02, UC03 | HU01, HU02, HU03, HU06 |
-| `/solicitar` | `src/pages/solicitar/index.astro` | UC04, UC05 | HU04, HU05 |
-| `/solicitar/enviada` | `src/pages/solicitar/enviada.astro` | UC04, UC05 | HU04, HU05 |
-| `/painel/entrar` e `/painel/sair` | `src/pages/painel/entrar.astro` e `sair.ts` | UC06 | HU07 |
-| `/painel` | `src/pages/painel/index.astro` | UC07 | HU08 |
-| `/painel/[id]` | `src/pages/painel/[id].astro` | UC08 a UC12 | HU09, HU10, HU11 |
-| `/acompanhar` | `src/pages/acompanhar.astro` | UC13 | HU13 |
-| `/telegram` | `src/pages/telegram.ts` | UC14, UC15 | HU14, HU15 |
+| `/` | `src/pages/index.astro` | UC01 a UC04 | HU01 a HU08 |
+| `/solicitar` | `src/pages/solicitar/index.astro` | UC05, UC06 | HU09, HU10 |
+| `/solicitar/enviada` | `src/pages/solicitar/enviada.astro` | UC05, UC06 | HU09, HU10 |
+| `/painel/entrar` e `/painel/sair` | `src/pages/painel/entrar.astro` e `sair.ts` | UC07 | HU11 |
+| `/painel` | `src/pages/painel/index.astro` | UC08 | HU12 |
+| `/painel/[id]` | `src/pages/painel/[id].astro` | UC09 a UC13 | HU13, HU14, HU15 |
+| `/acompanhar` | `src/pages/acompanhar.astro` | UC14 | HU16 |
+| `/telegram` | `src/pages/telegram.ts` | UC15, UC16 | HU17, HU18 |
 
 As mensagens do Telegram são montadas em `src/lib/notificador.ts`. A tabela `solicitacao` está em `migrations/0001_solicitacao.sql` e `migrations/0002_telegram.sql`, as regras de negócio em `src/lib/solicitacao.ts`, o acesso ao banco em `src/lib/repositorio.ts` e a sessão do proprietário em `src/lib/sessao.ts` e `src/middleware.ts`.

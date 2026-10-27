@@ -61,7 +61,7 @@ export async function excluir(id: number): Promise<void> {
   await env.DB.prepare('DELETE FROM solicitacao WHERE id = ?').bind(id).run();
 }
 
-// UC13: compara só os dígitos do telefone e devolve apenas o que o cliente pode ver.
+// UC14: compara só os dígitos do telefone e devolve apenas o que o cliente pode ver.
 export async function acompanhar(protocolo: string, telefone: string) {
   const digitos = telefone.replace(/\D/g, '');
   const s = await env.DB.prepare('SELECT protocolo, tipo, situacao, motivo_recusa, atualizada_em, telefone FROM solicitacao WHERE protocolo = ?')
@@ -71,7 +71,7 @@ export async function acompanhar(protocolo: string, telefone: string) {
   return publico;
 }
 
-// UC14: guarda a conversa do Telegram na solicitação que gerou o código.
+// UC15: guarda a conversa do Telegram na solicitação que gerou o código.
 export async function vincularTelegram(codigo: string, chatId: string): Promise<Registro | null> {
   return env.DB.prepare('UPDATE solicitacao SET telegram_chat_id = ? WHERE telegram_codigo = ? RETURNING *')
     .bind(chatId, codigo).first<Registro>();

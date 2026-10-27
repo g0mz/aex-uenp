@@ -1,0 +1,56 @@
+@page {
+  size: A4;
+  margin: 3cm 2cm 2cm 3cm;
+  @top-right { content: counter(page); font: 10pt "Times New Roman", Times, serif; }
+}
+@page :first {
+  @top-right { content: none; }
+}
+@page paisagem {
+  size: A4 landscape;
+  margin: 2cm 2cm 1.5cm 2.5cm;
+  @top-right { content: counter(page); font: 10pt "Times New Roman", Times, serif; }
+}
+
+* { box-sizing: border-box; }
+html { font: 12pt/1.5 "Times New Roman", Times, serif; color: #000; }
+body { margin: 0; }
+
+h1, h2, h3 { font-family: "Times New Roman", Times, serif; break-after: avoid; }
+h1 { font-size: 12pt; text-transform: uppercase; margin: 1.6em 0 0.8em; }
+h2 { font-size: 12pt; margin: 1.4em 0 0.6em; }
+h3 { font-size: 12pt; font-weight: normal; font-style: italic; margin: 1.2em 0 0.5em; }
+p { margin: 0 0 0.7em; text-align: justify; text-indent: 1.25cm; }
+p.sem-recuo, td p, li p { text-indent: 0; }
+ul, ol { margin: 0 0 0.8em; padding-left: 1.5cm; }
+li { margin-bottom: 0.25em; text-align: justify; }
+
+.capa { page-break-after: always; text-align: center; min-height: 24cm; display: flex; flex-direction: column; justify-content: space-between; }
+.capa p { text-indent: 0; text-align: center; margin: 0; }
+.capa .instituicao { text-transform: uppercase; line-height: 1.4; }
+.capa .autores { line-height: 1.7; text-transform: uppercase; }
+.capa .titulo { font-weight: bold; text-transform: uppercase; font-size: 14pt; line-height: 1.4; }
+.capa .disciplina { line-height: 1.4; }
+.capa .rodape { text-transform: uppercase; line-height: 1.4; }
+
+table { width: 100%; border-collapse: collapse; margin: 0 0 1em; font-size: 10pt; line-height: 1.3; break-inside: auto; }
+caption { caption-side: top; text-align: left; font-size: 11pt; padding-bottom: 0.3em; font-weight: normal; break-after: avoid; }
+th, td { border: 0.6pt solid #000; padding: 0.15cm 0.2cm; vertical-align: top; text-align: left; }
+th { background: #e8e8e8; font-weight: bold; }
+tr { break-inside: avoid; }
+thead { display: table-header-group; }
+thead tr { break-after: avoid; }
+tbody tr:first-child { break-before: avoid; }
+figure img.tela { max-height: 11.5cm; width: auto; }
+.fonte { font-size: 10pt; text-indent: 0; margin: -0.5em 0 1em; }
+
+figure { margin: 0 0 1em; text-align: center; break-inside: avoid; }
+figure img { max-width: 100%; height: auto; border: 0.4pt solid #888; }
+figcaption { font-size: 10pt; margin-top: 0.3em; text-align: center; }
+
+.paisagem { page: paisagem; break-before: page; break-after: page; }
+.paisagem figure img { max-height: 15.2cm; width: auto; max-width: 100%; }
+.paisagem h2 { margin-top: 0; }
+
+.pendente { background: #fff3b0; padding: 0 0.1cm; }
+code { font: 10pt Consolas, "Courier New", monospace; }

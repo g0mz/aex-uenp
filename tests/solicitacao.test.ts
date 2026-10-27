@@ -8,16 +8,16 @@ const base: DadosSolicitacao = {
   rodovia: '', km: '', cidade: '',
 };
 
-test('RN04: oficina com nome, telefone e descrição é válida', () => {
+test('RN07: oficina com nome, telefone e descrição é válida', () => {
   assert.deepEqual(validar(base), {});
 });
 
-test('RN04: exige nome, telefone e descrição', () => {
+test('RN07: exige nome, telefone e descrição', () => {
   const erros = validar({ ...base, nome: ' ', telefone: '', descricao: '' });
   assert.deepEqual(Object.keys(erros).sort(), ['descricao', 'nome', 'telefone']);
 });
 
-test('RN04: socorro exige rodovia, km e cidade', () => {
+test('RN07: socorro exige rodovia, km e cidade', () => {
   const erros = validar({ ...base, tipo: 'socorro' });
   assert.deepEqual(Object.keys(erros).sort(), ['cidade', 'km', 'rodovia']);
   assert.deepEqual(validar({ ...base, tipo: 'socorro', rodovia: 'SP-270', km: '377', cidade: 'Ourinhos' }), {});
@@ -43,11 +43,11 @@ test('lerFormulario ignora campos extras e apara espaços', () => {
   assert.equal('situacao' in d, false);
 });
 
-test('RF05: protocolo com ano e id de seis dígitos', () => {
+test('RF06: protocolo com ano e id de seis dígitos', () => {
   assert.equal(gerarProtocolo(123, 2026), 'GD-2026-000123');
 });
 
-test('RN06: recusa exige motivo', () => {
+test('RN09: recusa exige motivo', () => {
   assert.ok(alterarSituacao('recusada', '  ').erro);
   assert.deepEqual(alterarSituacao('recusada', 'Fora do escopo'), {});
   assert.deepEqual(alterarSituacao('em_analise', ''), {});

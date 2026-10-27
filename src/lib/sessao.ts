@@ -1,4 +1,4 @@
-// Proprietario do diagrama de classes: a senha fica em segredo do servidor (RNF05), e a sessão é um cookie assinado.
+// Proprietario do diagrama de classes: a senha fica em segredo do servidor (RNF06), e a sessão é um cookie assinado.
 
 export const COOKIE_SESSAO = 'sessao_painel';
 export const DURACAO_SESSAO_S = 12 * 3600;

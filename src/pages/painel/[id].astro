@@ -1,5 +1,5 @@
 ---
-// UC08 Consultar, UC09 Alterar situação, UC10 Motivo da recusa, UC11 Excluir, UC12 WhatsApp do cliente.
+// UC09 Consultar, UC10 Alterar situação, UC11 Motivo da recusa, UC12 Excluir, UC13 WhatsApp do cliente.
 import PainelLayout from '../../layouts/PainelLayout.astro';
 import SeloSituacao from '../../components/SeloSituacao.astro';
 import { atualizar, buscar, excluir } from '../../lib/repositorio';
@@ -34,7 +34,7 @@ if (Astro.request.method === 'POST') {
   if (!erro) {
     try {
       await atualizar(id, form.situacao, form.observacao, form.motivo);
-      // UC14: avisa o cliente só se a situação mudou e ele ativou o Telegram.
+      // UC15: avisa o cliente só se a situação mudou e ele ativou o Telegram.
       if (antes.telegram_chat_id && antes.situacao !== form.situacao) {
         Astro.locals.cfContext.waitUntil((async () => {
           const depois = await buscar(id);
@@ -102,12 +102,12 @@ const linhas: [string, string | null][] = [
 </PainelLayout>
 
 <script>
-  // UC10: o campo de motivo só aparece quando a nova situação é Recusada.
+  // UC11: o campo de motivo só aparece quando a nova situação é Recusada.
   const select = document.querySelector<HTMLSelectElement>('[data-situacao]')!;
   const motivo = document.querySelector<HTMLElement>('[data-motivo]')!;
   select.addEventListener('change', () => (motivo.hidden = select.value !== 'recusada'));
 
-  // HU11: confirmação antes de excluir.
+  // HU15: confirmação antes de excluir.
   document.querySelector('[data-excluir]')!.addEventListener('submit', (e) => {
     if (!confirm('Excluir esta solicitação? Esta ação não pode ser desfeita.')) e.preventDefault();
   });

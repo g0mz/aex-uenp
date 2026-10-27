@@ -1,5 +1,5 @@
-// Notificador do diagrama de classes (UC14, UC15): avisos pelo Telegram em texto simples, sem parse_mode.
-// Nunca lança: uma falha no envio não pode impedir a gravação nem a alteração da solicitação (RN07).
+// Notificador do diagrama de classes (UC15, UC16): avisos pelo Telegram em texto simples, sem parse_mode.
+// Nunca lança: uma falha no envio não pode impedir a gravação nem a alteração da solicitação (RN10).
 import type { Registro } from './repositorio';
 import { SITUACOES, TIPOS } from './solicitacao.ts';
 

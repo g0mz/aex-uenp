@@ -1,4 +1,4 @@
-// Classe Solicitacao do diagrama de classes: enumerações e regras de negócio (RN04, RF05, RN06).
+// Classe Solicitacao do diagrama de classes: enumerações e regras de negócio (RN07, RF06, RN09).
 
 export const TIPOS = { oficina: 'Na oficina', socorro: 'Socorro na rodovia' } as const;
 export const PERFIS = {
@@ -37,7 +37,7 @@ export function lerFormulario(form: FormData): DadosSolicitacao {
   ) as DadosSolicitacao;
 }
 
-// RN04: nome, telefone e descrição sempre; rodovia, km e cidade no socorro.
+// RN07: nome, telefone e descrição sempre; rodovia, km e cidade no socorro.
 export function validar(d: DadosSolicitacao): Record<string, string> {
   const erros: Record<string, string> = {};
   if (!pertence(TIPOS, d.tipo)) erros.tipo = 'Escolha o tipo de atendimento.';
@@ -56,7 +56,7 @@ export function validar(d: DadosSolicitacao): Record<string, string> {
   return erros;
 }
 
-// RF05
+// RF06
 export function gerarProtocolo(id: number, ano: number): string {
   return `GD-${ano}-${String(id).padStart(6, '0')}`;
 }
@@ -67,7 +67,7 @@ export function situacoesDoTipo(tipo: string): Situacao[] {
   return tipo === 'socorro' ? todas : todas.filter((s) => s !== 'socorro_a_caminho');
 }
 
-// RN06: a recusa só é aceita com motivo.
+// RN09: a recusa só é aceita com motivo.
 export function alterarSituacao(nova: string, motivo: string, observacao = '', tipo = 'socorro'): { erro?: string } {
   if (!pertence(SITUACOES, nova)) return { erro: 'Situação inválida.' };
   if (!situacoesDoTipo(tipo).includes(nova as Situacao)) return { erro: 'Esta situação não vale para pedidos na oficina.' };

@@ -1,4 +1,4 @@
-// UC14: webhook do bot. O Telegram envia JSON com o cabeçalho secreto definido em setWebhook.
+// UC15: webhook do bot. O Telegram envia JSON com o cabeçalho secreto definido em setWebhook.
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { codigoDoStart, enviarTelegram, textoBoasVindas } from '../lib/notificador';

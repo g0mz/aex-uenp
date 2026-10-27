@@ -1,5 +1,5 @@
 ---
-// UC04 Solicitar atendimento, com a extensão UC05 Pedir socorro na rodovia.
+// UC05 Solicitar atendimento, com a extensão UC06 Pedir socorro na rodovia.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
@@ -23,7 +23,7 @@ if (Astro.request.method === 'POST') {
   if (Object.keys(erros).length === 0) {
     try {
       const { id, protocolo, telegramCodigo } = await inserir(dados);
-      // UC15: aviso ao proprietário depois da resposta, sem atrasar o redirecionamento.
+      // UC16: aviso ao proprietário depois da resposta, sem atrasar o redirecionamento.
       Astro.locals.cfContext.waitUntil((async () => {
         const nova = await buscar(id);
         if (nova) await avisarProprietario(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_PROPRIETARIO, nova, `${Astro.url.origin}/painel/${id}`);
@@ -108,7 +108,7 @@ const temErros = Object.keys(erros).length > 0;
 </BaseLayout>
 
 <script>
-  // UC05: a localização só aparece e só é obrigatória no socorro.
+  // UC06: a localização só aparece e só é obrigatória no socorro.
   const bloco = document.querySelector<HTMLFieldSetElement>('[data-socorro]')!;
   const atualizar = () => {
     const socorro = document.querySelector<HTMLInputElement>('input[name="tipo"]:checked')?.value === 'socorro';

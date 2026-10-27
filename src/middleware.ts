@@ -1,4 +1,4 @@
-// RN05: somente o proprietário autenticado acessa o painel. Também aplica os cabeçalhos de segurança do painel.
+// RN08: somente o proprietário autenticado acessa o painel. Também aplica os cabeçalhos de segurança do painel.
 import { defineMiddleware } from 'astro:middleware';
 import { env } from 'cloudflare:workers';
 import { COOKIE_SESSAO, sessaoValida } from './lib/sessao';
