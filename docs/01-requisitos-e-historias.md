@@ -237,7 +237,7 @@ No UC05, a localização só é pedida no ramo de socorro, e o formulário volta
 
 ## 11. Diagrama de classes
 
-As classes da versão 1.0 (Empresa, Servico, Marca, ItemPortfolio, ClienteAtendido e RedeSocial) descrevem o conteúdo do site e continuam as mesmas e têm diagrama no relatório da ES-II. A versão 2.0 acrescenta as classes abaixo, como melhorias e sem diagrama novo. A classe dos dados de quem pede o atendimento se chama Solicitante, e não Cliente, para não se confundir com o ator Cliente nem com ClienteAtendido.
+As classes da versão 1.0 (Empresa, Servico, Marca, ItemPortfolio, ClienteAtendido e RedeSocial) descrevem o conteúdo do site e continuam as mesmas e têm diagrama no relatório da ES-II. A versão 2.0 acrescenta as classes abaixo, sem diagrama novo. A classe dos dados de quem pede o atendimento se chama Solicitante, e não Cliente, para não se confundir com o ator Cliente nem com ClienteAtendido.
 
 | Classe | Origem | Persistência |
 |---|---|---|

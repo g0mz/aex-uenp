@@ -16,19 +16,22 @@ O grupo desenvolveu o sistema em conjunto, em um único computador. Por isso os 
 
 ## Tecnologias
 
-- Astro, para as páginas do site e do painel
-- Tailwind CSS, para o estilo
+- HTML, CSS e JavaScript, nas páginas e nos formulários
+- Astro, para as páginas do site e do painel, com os adaptadores `@astrojs/cloudflare` e `@astrojs/sitemap` e o `@astrojs/check` na verificação de tipos do build
+- Tailwind CSS, para o estilo, com as fontes Roboto Slab e Roboto Condensed (Fontsource) e os logos das marcas do `simple-icons`
 - Cloudflare Workers, para executar as páginas dinâmicas
 - Cloudflare D1, banco de dados SQLite da Cloudflare
 - Wrangler, para executar o sistema e o banco no computador
 - TypeScript, para as regras de negócio, o acesso ao banco e a sessão do painel
 - API de bots do Telegram, para os avisos ao proprietário e ao cliente
+- Links do WhatsApp (`wa.me`) e do Google Maps, para contato e localização
 - Node.js, com o executor de testes `node --test`
+- Git e GitHub, para o controle de versão
 - Astah UML, para os diagramas de casos de uso, atividades e classes da modelagem de Engenharia de Software II
 
 ## Como executar
 
-É necessário ter o Node.js instalado. Não é preciso conta na Cloudflare, pois o Wrangler simula o D1 localmente.
+É necessário ter o Node.js 22.23.4 ou mais recente e o npm instalados. Não é preciso conta na Cloudflare, pois o Wrangler simula o D1 localmente.
 
 ```bash
 npm install
