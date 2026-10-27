@@ -19,6 +19,10 @@ Trabalho da AEX integrada de Engenharia de Software II e Programação para Inte
 - Cloudflare Workers, para executar as páginas dinâmicas
 - Cloudflare D1, banco de dados SQLite da Cloudflare
 - Wrangler, para executar o sistema e o banco no computador
+- TypeScript, para as regras de negócio, o acesso ao banco e a sessão do painel
+- API de bots do Telegram, para os avisos ao proprietário e ao cliente
+- Node.js, com o executor de testes `node --test`
+- Astah UML, para os diagramas de casos de uso, atividades e classes
 
 ## Como executar
 
