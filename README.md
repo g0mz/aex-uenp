@@ -78,7 +78,7 @@ O cliente ativa os avisos pelo botão "Receber atualizações no Telegram" da p�
 
 ## Rastreabilidade
 
-Cada rota do sistema corresponde a um caso de uso e a uma história de usuário, descritos em `docs/01-requisitos-e-historias.md`.
+Cada rota do sistema corresponde a um caso de uso e a uma história de usuário, descritos no documento de requisitos e histórias (versão 2.0 da modelagem), entregue junto com o relatório.
 
 | Rota | Arquivo | Caso de uso | História |
 |---|---|---|---|
